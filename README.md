@@ -1,76 +1,53 @@
 ````markdown
-# Mini Project 2: Smart Task Manager API — Database Edition
+# Mini Project 2: Smart Task Manager API - Database Edition
 
 ## Overview
 
-In this mini project, you will upgrade your previous **Smart Task Manager API** from an in-memory application into a real database-backed backend system.
+In this mini project, you will continue improving your previous Smart Task Manager API.
 
-In the previous project, tasks were stored temporarily in a Python list or dictionary. This means all tasks disappeared whenever the server restarted. In this version, you will store tasks permanently in a database and improve your API with filtering, search, pagination, testing, and basic performance improvements.
+In the first version, tasks were stored in memory using a Python list or dictionary. In this version, you will replace that temporary storage with a real database so that tasks are stored permanently.
 
-This project is designed to help you practice:
+The main goal of this project is to practice:
 
 - Intro to databases
 - Nonrelational databases
 - Interacting with databases
 - Integrating APIs with databases
-- Code performance basics
+- Basic code performance improvements
 
-Estimated required time: **24 hours**
+By the end of this project, your API should be able to create, read, update, delete, filter, search, and paginate tasks using a database.
+
+---
+
+## Estimated Time
+
+This project is designed to take around 24 hours.
 
 ---
 
 ## Project Goal
 
-Your goal is to take your previous Task Manager API and improve it so that tasks are stored permanently in a database.
+You will upgrade your previous Task Manager API into a database-backed backend application.
 
-Your API should still support:
+Your API should still manage tasks, but all task data should now come from a database instead of an in-memory Python list or dictionary.
 
-- Creating tasks
-- Getting all tasks
-- Getting one task by ID
-- Updating tasks
-- Deleting tasks
-- Filtering and searching tasks
-
-However, this time all task data should come from the database, not from in-memory storage.
-
----
-
-## Database Options
-
-You can choose one of the following database paths.
+You can choose one of the following database options:
 
 ### Option A: Relational Database
 
-Use a relational database such as:
-
-- SQLite
-- PostgreSQL
-
-Recommended tools:
-
-- SQLAlchemy
-- SQLModel
-- Alembic, optional
+Use SQLite or PostgreSQL with SQLAlchemy.
 
 ### Option B: Nonrelational Database
 
-Use a nonrelational database such as:
+Use MongoDB with PyMongo or Motor.
 
-- MongoDB
-
-Recommended tools:
-
-- PyMongo
-- Motor
-
-Both options are acceptable as long as your API behavior follows the project requirements.
+Both options are acceptable as long as your API behavior matches the project requirements.
 
 ---
 
-## Task Data Structure
+## Task Model
 
-Each task should include the following fields:
+Each task should have the following structure:
 
 ```json
 {
@@ -83,57 +60,57 @@ Each task should include the following fields:
   "created_at": "datetime",
   "updated_at": "datetime"
 }
-````
+```
 
 Compared to the previous project, you should add an `updated_at` field.
 
-The `updated_at` value should change whenever a task is updated.
+The `created_at` field should show when the task was created.
+
+The `updated_at` field should show when the task was last updated.
 
 ---
 
-## Main Requirements
+## Database Requirements
 
-### 1. Database Integration
+You must integrate a real database into your project.
 
-You should connect your FastAPI application to a real database.
+Your database implementation should meet the following requirements:
 
-Your application should:
-
-* Store tasks in the database
-* Keep data available after restarting the server
-* Avoid using a global Python list or dictionary as the main storage
-* Keep database connection/configuration separate from route logic
-* Avoid hardcoding sensitive database configuration when possible
-
-Examples of better configuration options:
-
-* Environment variables
-* `.env` file
-* Configuration module
+- Task data should persist after restarting the server
+- A global Python list or dictionary should not be used as the main storage
+- Database connection logic should be separated from route logic
+- Database configuration should not be hardcoded when possible
+- Your API should interact with the database for creating, reading, updating, deleting, filtering, and searching tasks
 
 ---
 
-### 2. CRUD API Endpoints
+## Required API Endpoints
 
 You should implement the following endpoints:
 
-| Method           | Endpoint           | Description        |
-| ---------------- | ------------------ | ------------------ |
-| `POST`           | `/tasks`           | Create a new task  |
-| `GET`            | `/tasks`           | Get all tasks      |
-| `GET`            | `/tasks/{task_id}` | Get one task by ID |
-| `PUT` or `PATCH` | `/tasks/{task_id}` | Update a task      |
-| `DELETE`         | `/tasks/{task_id}` | Delete a task      |
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/tasks` | Create a new task |
+| GET | `/tasks` | Get all tasks |
+| GET | `/tasks/{task_id}` | Get one task by ID |
+| PUT or PATCH | `/tasks/{task_id}` | Update a task |
+| DELETE | `/tasks/{task_id}` | Delete a task |
 
-Your API should:
+---
 
-* Return `404` when a task does not exist
-* Return `422` when request data is invalid
-* Use proper HTTP status codes
-* Keep response formats consistent
-* Validate task status and priority values
+## Expected API Behavior
 
-Allowed status values:
+Your API should behave consistently and return meaningful responses.
+
+Expected behavior:
+
+- Return `404 Not Found` if a task does not exist
+- Return `422 Unprocessable Entity` for invalid request data
+- Return proper HTTP status codes for create, update, and delete operations
+- Keep response formats consistent across endpoints
+- Validate allowed values for `status` and `priority`
+
+Allowed `status` values:
 
 ```text
 todo
@@ -141,7 +118,7 @@ in_progress
 done
 ```
 
-Allowed priority values:
+Allowed `priority` values:
 
 ```text
 low
@@ -151,9 +128,9 @@ high
 
 ---
 
-### 3. Filtering and Search
+## Filtering and Search
 
-Your `GET /tasks` endpoint should support query parameters.
+Your `GET /tasks` endpoint should support filtering and searching using query parameters.
 
 Examples:
 
@@ -166,20 +143,22 @@ Examples:
 
 You should support:
 
-* Filtering by status
-* Filtering by priority
-* Filtering by one tag
-* Searching inside task title and description
+- Filtering by status
+- Filtering by priority
+- Filtering by one tag
+- Searching in title and description
 
 Important:
 
-Filtering and search should happen through database queries, not by loading all tasks from the database and filtering them manually in Python.
+Filtering and searching should happen through database queries.
+
+You should not load all tasks from the database and then filter them manually in Python.
 
 ---
 
-### 4. Pagination
+## Pagination
 
-You should add pagination to `GET /tasks`.
+You should add pagination to the `GET /tasks` endpoint.
 
 Examples:
 
@@ -190,10 +169,10 @@ Examples:
 
 Pagination requirements:
 
-* Default `limit`: `10`
-* Maximum `limit`: `50`
-* Default `offset`: `0`
-* The response should include the task data and pagination metadata
+- Default `limit`: `10`
+- Maximum `limit`: `50`
+- Default `offset`: `0`
+- The response should include both task data and pagination metadata
 
 Example response:
 
@@ -219,37 +198,30 @@ Example response:
 
 ---
 
-### 5. Code Performance Improvement
+## Performance Improvement
 
 You should identify and apply at least one simple performance improvement.
 
 Examples:
 
-* Add an index on `status`
-* Add an index on `priority`
-* Add an index on `created_at`
-* Add a text index for search if you use MongoDB
-* Avoid loading all records before filtering
-* Use pagination instead of returning unlimited results
+- Add an index on `status`
+- Add an index on `priority`
+- Add an index on `created_at`
+- Add a text index for search if you use MongoDB
+- Avoid loading all records before filtering
+- Use pagination instead of returning unlimited results
 
-You should briefly explain your chosen performance improvement in your README file.
+In your README, briefly explain:
 
-Your explanation can be short, but it should answer:
-
-* What did you improve?
-* Why does it help performance?
-
-Example:
-
-```text
-I added an index on the status field because the API allows users to filter tasks by status. This helps the database find matching tasks faster instead of scanning all records.
-```
+- Which performance improvement you added
+- Why it improves the application
+- Where it is implemented in your code
 
 ---
 
-### 6. Database Seeding Script
+## Database Seeding
 
-You should create a simple script that inserts sample tasks into your database.
+You should add a simple seed script to insert sample tasks into the database.
 
 Example command:
 
@@ -259,51 +231,50 @@ python seed.py
 
 Your seed script should create at least 20 tasks with different:
 
-* Status values
-* Priority values
-* Tags
-* Titles
-* Descriptions
+- statuses
+- priorities
+- tags
+- titles
+- descriptions
 
-This will help you test filtering, searching, pagination, and performance behavior.
+This will help you test filtering, searching, pagination, and performance behavior more easily.
 
 ---
 
-### 7. Testing
+## Testing
 
 You should write tests for your database-backed API.
 
 Minimum required tests:
 
-* Create a task
-* Get all tasks
-* Get one task by ID
-* Update a task
-* Delete a task
-* Invalid task ID returns `404`
-* Invalid status returns `422`
-* Invalid priority returns `422`
-* Filter by status
-* Filter by priority
-* Search by keyword
-* Pagination works correctly
+- Create a task
+- Get all tasks
+- Get one task by ID
+- Update a task
+- Delete a task
+- Invalid task ID returns `404`
+- Invalid status or priority returns `422`
+- Filter by status
+- Filter by priority
+- Search by keyword
+- Pagination works correctly
 
 Important:
 
 Your tests should not depend on production data.
 
-You can use one of these approaches:
+You can use:
 
-* A separate test database
-* A temporary SQLite database
-* A MongoDB test collection
-* Database cleanup before each test
+- A separate test database
+- A temporary SQLite test database
+- A MongoDB test collection
+- Database cleanup before each test
 
 ---
 
 ## Optional Bonus Features
 
-You can implement one or more of the following bonus features.
+You can add one or more of the following bonus features.
 
 ---
 
@@ -333,13 +304,13 @@ Example response:
 }
 ```
 
-The statistics should be calculated using database queries or database aggregation.
+The statistics should be calculated using database queries or aggregation.
 
 ---
 
-### Bonus 2: Sorting Tasks
+### Bonus 2: Sort Tasks
 
-Support sorting in `GET /tasks`.
+Support sorting in the `GET /tasks` endpoint.
 
 Examples:
 
@@ -368,15 +339,13 @@ desc
 
 ### Bonus 3: Archive Tasks
 
-Add an archive feature.
-
-Endpoint:
+Add this endpoint:
 
 ```text
 PATCH /tasks/{task_id}/archive
 ```
 
-Archived tasks should not appear in the default task list unless requested.
+Archived tasks should not appear in the default task list unless they are requested.
 
 Example:
 
@@ -384,15 +353,11 @@ Example:
 /tasks?include_archived=true
 ```
 
-For this feature, you should add an `is_archived` field to your task data.
+This feature requires adding an `is_archived` field to your task model.
 
 ---
 
 ## Suggested Folder Structure
-
-You can organize your project in different ways, but the following structures are recommended.
-
----
 
 ### Relational Database Option
 
@@ -416,8 +381,6 @@ project/
 ├── requirements.txt
 └── README.md
 ```
-
----
 
 ### MongoDB Option
 
@@ -446,85 +409,80 @@ project/
 
 ## Estimated Time Breakdown
 
-| Work Item                                              | Estimated Time |
-| ------------------------------------------------------ | -------------: |
-| Review your previous project and plan database changes |        2 hours |
-| Set up database connection and models/collections      |        4 hours |
-| Implement database-backed CRUD                         |        5 hours |
-| Implement filtering and search                         |        3 hours |
-| Add pagination                                         |        2 hours |
-| Add performance improvement/indexing                   |        2 hours |
-| Add seed script                                        |        2 hours |
-| Write tests                                            |        3 hours |
-| README and cleanup                                     |         1 hour |
+| Work item | Estimated time |
+|---|---:|
+| Review previous project and plan database changes | 2 hours |
+| Set up database connection and models/collections | 4 hours |
+| Implement database-backed CRUD | 5 hours |
+| Implement filtering and search | 3 hours |
+| Add pagination | 2 hours |
+| Add performance improvement/indexing | 2 hours |
+| Add seed script | 2 hours |
+| Write tests | 3 hours |
+| README and cleanup | 1 hour |
 
-Total estimated time: **24 hours**
-
----
-
-## Submission Guidelines
-
-You should submit your project as a GitHub repository.
-
-Your repository should include:
-
-* Complete FastAPI application code
-* Database integration
-* Seed script
-* Tests
-* `requirements.txt` or equivalent dependency file
-* README file with setup and run instructions
-
-Your README should explain:
-
-* Which database you used
-* How to install dependencies
-* How to configure environment variables, if needed
-* How to run the application
-* How to run the seed script
-* How to run tests
-* Which performance improvement you added
+Total: around 24 hours
 
 ---
 
 ## Evaluation Criteria
 
-| Criteria                                      | Points |
-| --------------------------------------------- | -----: |
-| Database integration and persistence          |     20 |
-| Correct CRUD behavior                         |     20 |
-| Filtering and search through database queries |     15 |
-| Pagination implementation                     |     10 |
-| Validation and error handling                 |     10 |
-| Testing quality                               |     15 |
-| Performance improvement and explanation       |      5 |
-| Code organization and README                  |      5 |
+| Criteria | Points |
+|---|---:|
+| Database integration and persistence | 20 |
+| Correct CRUD behavior | 20 |
+| Filtering and search through database queries | 15 |
+| Pagination implementation | 10 |
+| Validation and error handling | 10 |
+| Testing quality | 15 |
+| Performance improvement and explanation | 5 |
+| Code organization and README | 5 |
 
-Total: **100 points**
+Total: 100 points
 
 ---
 
-## Important Notes
+## Submission Guidelines
 
-* You should not use a global Python list or dictionary as your main task storage.
-* You should not filter all tasks manually in Python after loading everything from the database.
-* You should not commit sensitive credentials such as database passwords or API keys.
-* You should keep your code readable and organized.
-* You should commit your changes regularly with meaningful commit messages.
+Your submission should include:
+
+- A GitHub repository link
+- A working FastAPI application
+- A database-backed implementation
+- A seed script
+- Tests
+- A clear README file
+
+Your README should include:
+
+- Project description
+- Database choice and setup instructions
+- How to install dependencies
+- How to run the server
+- How to run the seed script
+- How to run the tests
+- API endpoint documentation
+- Explanation of your performance improvement
+
+---
+
+## Rules
+
+- Do not use an in-memory list or dictionary as the main task storage
+- Do not hardcode sensitive database credentials
+- Do not copy code from classmates
+- Keep your code clean and organized
+- Commit your changes regularly with meaningful commit messages
 
 ---
 
 ## Tips
 
-* Start by connecting your application to the database.
-* Then implement create and get endpoints.
-* After that, add update and delete.
-* Add filtering and search after the basic CRUD is working.
-* Add pagination before testing with many tasks.
-* Use the seed script to create enough data for testing.
-* Test your API with Swagger UI at `/docs`.
-
-Good luck and build something solid.
-
-```
-```
+- Start by connecting your database first
+- Then move create, get, update, and delete logic one by one
+- Test each endpoint after changing it
+- Use Swagger UI at `/docs` to test your API
+- Use seed data to test filters and pagination
+- Keep database logic separate from route logic
+- Focus on correctness before adding bonus features
+````
