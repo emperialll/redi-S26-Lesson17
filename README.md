@@ -1,6 +1,6 @@
-# Mini Project 2: Smart Task Manager API Database Edition
+# 🚀 Mini Project 2: Smart Task Manager API Database Edition
 
-## Overview
+## 📌 Overview
 
 In this assignment, you will continue working on your previous Smart Task Manager API project.
 
@@ -26,7 +26,7 @@ By completing this project, you will practice:
 
 ---
 
-## Project Requirements
+## 🧱 Project Requirements
 
 ## 1. Database Integration
 
@@ -323,7 +323,7 @@ This feature requires adding an `is_archived` field to your task model.
 
 ---
 
-## Suggested Project Structure
+## 📁 Suggested Project Structure
 
 If you choose a relational database, you can use this structure:
 
@@ -393,7 +393,7 @@ Total: approximately 24 hours
 
 ---
 
-## Evaluation Criteria
+## 🧪 Evaluation Criteria
 
 | Criteria                                      | Points |
 | --------------------------------------------- | -----: |
@@ -410,7 +410,7 @@ Total: 100 points
 
 ---
 
-## Submission Guidelines
+## 📦 Submission Guidelines
 
 Your submission should include:
 
